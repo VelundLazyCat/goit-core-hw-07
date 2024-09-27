@@ -291,7 +291,7 @@ def main():
     book = AddressBook()
     # блок команд для спрощення автотесту днів народжень
 
-    john_record = Record("John")
+    '''john_record = Record("John")
     john_record.add_phone("1234567890")
     john_record.add_phone("5555555555")
     john_record.add_birthday('29.09.2022')
@@ -303,7 +303,7 @@ def main():
     cat_record = Record("Cat")
     cat_record.add_phone("3334445556")
     cat_record.add_birthday('02.10.2022')
-    book.add_record(cat_record)
+    book.add_record(cat_record)'''
 
     print("Welcome to the assistant bot!")
 
