@@ -37,7 +37,8 @@ class Birthday(Field):
 
     def __init__(self, value):
         try:
-            value = self.string_to_date(value)
+            # value = self.string_to_date(value)
+            self.string_to_date(value)
             super().__init__(value)
         except ValueError:
             raise MyCustomError("Invalid date format. Use DD.MM.YYYY")
@@ -134,8 +135,11 @@ class AddressBook(UserDict):
         today = date.today()
 
         for user in prepare_user_list():
-
-            birthday_this_year = user["birthday"].value.replace(
+            if not user["birthday"]:
+                continue
+            date_birthday = datetime.strptime(
+                user["birthday"].value, '%d.%m.%Y').date()
+            birthday_this_year = date_birthday.replace(
                 year=today.year)
 
             if (birthday_this_year - today).days < 0:
@@ -269,9 +273,13 @@ def show_birthday(args, book):
 def birthdays(args, book):
 
     congrats = book.get_upcoming_birthdays()
-    message = '\ncongratulation list for next week\n\n'.upper()
-    for con in congrats:
-        message += f'{con['name']} birthday:{con['birthday']}\n'
+    if congrats:
+        message = '\ncongratulation list for next week\n\n'.upper()
+        for con in congrats:
+            message += f'{con['name']} birthday:{con['birthday']}\n'
+    else:
+        message = '\nno birthdays for next week.\n\n'.upper()
+
     return message
 
 
@@ -289,8 +297,8 @@ COMMANDS = {'hello': say_hello,  'add': add_contact,
 
 def main():
     book = AddressBook()
-    # блок команд для спрощення автотесту днів народжень
 
+    # блок команд для спрощення автотесту днів народжень
     '''john_record = Record("John")
     john_record.add_phone("1234567890")
     john_record.add_phone("5555555555")
@@ -308,8 +316,9 @@ def main():
     print("Welcome to the assistant bot!")
 
     while True:
-        user_input = input("Enter a command: ").strip().lower()
+        user_input = input("Enter a command: ").strip()
         command, *args = parse_input(user_input)
+        command = command.lower()
         if not args:
             args = None,
 
